@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 import { Login } from '../components/login/login';
+import { SingIn } from '../components/sing-in/sing-in';
 import { AppRouter } from './AppRouter';
 
 export const MainRouter = () => {
@@ -25,7 +26,8 @@ export const MainRouter = () => {
                 ) : (
                     <>
                         <Route exact path='/login' component={Login} />
-                        <Redirect to='/login' />
+                        <Route exact path='/singin' component={SingIn} />
+                        <Route path='/' component={SingIn} />
                     </>
                 )}
             </Switch>

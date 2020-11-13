@@ -1,19 +1,21 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../auth/AuthContext';
 import { types } from '../../types/types';
-import './login.css';
+import './sing-in.css';
 
 import { useForm } from '../../hooks/useForm/useForm';
-import { Link } from 'react-router-dom';
 
 const initialForm = {
+    nombre: '',
     email: '',
     password: '',
+    password2: '',
+    rol: 'medico',
 };
 
-export const Login = ({ history }) => {
+export const SingIn = ({ history }) => {
     const [formValues, handleInputChange, reset] = useForm(initialForm);
-    const { email, password } = formValues;
+    const { nombre, email, password, password2, rol } = formValues;
     const { dispatch } = useContext(AuthContext);
     const [loginerror, setLoginerror] = useState(false);
     console.log('error state', loginerror);
@@ -22,7 +24,7 @@ export const Login = ({ history }) => {
         myHeaders.append('Accept', 'application/json');
         myHeaders.append('Content-Type', 'application/json');
 
-        var raw = `{"strategy": "local","email": "${email}","password": "${password}"}`;
+        var raw = `{"name": "${nombre}","email": "${email}","password": "${password}","rol": "${rol}"}`;
         console.log(raw);
         var requestOptions = {
             method: 'POST',
@@ -31,14 +33,12 @@ export const Login = ({ history }) => {
             redirect: 'follow',
         };
 
-        fetch('http://localhost:3030/authentication', requestOptions)
+        fetch('http://localhost:3030/users', requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 console.log(result);
-                if (!!result.accessToken) {
-                    localStorage.setItem('user', JSON.stringify('result'));
-                    dispatch({ type: types.login, payload: result });
-                    history.push('/');
+                if (!!result.name) {
+                    history.push('/login');
                 } else {
                     reset();
                     setLoginerror(true);
@@ -56,9 +56,24 @@ export const Login = ({ history }) => {
                         handleLogin(email, password);
                     }}
                 >
-                    <h3 className='text-center'>Iniciar sesión</h3>
+                    <h3 className='text-center'>Nuevo registro</h3>
 
                     <div className='form-group text-left'>
+                        <label>Nombre</label>
+                        <input
+                            type='text'
+                            className={
+                                loginerror
+                                    ? 'form-control is-invalid'
+                                    : 'form-control'
+                            }
+                            placeholder='Su nombre'
+                            value={nombre}
+                            name='nombre'
+                            onChange={handleInputChange}
+                        />
+                        <div class='invalid-feedback'>Seleccione un nombre</div>
+
                         <label>Correo</label>
                         <input
                             type='email'
@@ -75,9 +90,6 @@ export const Login = ({ history }) => {
                         <div class='invalid-feedback'>
                             Seleccione un usuario correcto
                         </div>
-                    </div>
-
-                    <div className='form-group text-left'>
                         <label>Contraseña</label>
                         <input
                             type='password'
@@ -91,48 +103,44 @@ export const Login = ({ history }) => {
                             name='password'
                             onChange={handleInputChange}
                         />
+                        <div class='invalid-feedback'>Repita contraseña</div>
+                        <label>Repita contraseña</label>
+                        <input
+                            type='password'
+                            className={
+                                loginerror
+                                    ? 'form-control is-invalid'
+                                    : 'form-control'
+                            }
+                            placeholder='Enter password'
+                            value={password2}
+                            name='password2'
+                            onChange={handleInputChange}
+                        />
                         <div class='invalid-feedback'>
-                            Introduzca su contraseña
+                            Contraseña no coinside
                         </div>
-                    </div>
-
-                    <div className='form-group text-left'>
-                        <div className='custom-control custom-checkbox'>
-                            <input
-                                type='checkbox'
-                                className='custom-control-input'
-                                id='customCheck1'
-                            />
-                            <label
-                                className='custom-control-label'
-                                htmlFor='customCheck1'
-                            >
-                                Recordar
-                            </label>
-                        </div>
+                        <label for='exampleFormControlSelect1'>
+                            Seleccione un rol
+                        </label>
+                        <select
+                            class='form-control'
+                            id='exampleFormControlSelect1'
+                            value={rol}
+                            name='rol'
+                            onChange={handleInputChange}
+                        >
+                            <option>medico</option>
+                            <option>asistente</option>
+                        </select>
                     </div>
 
                     <button
                         type='submit'
-                        className='btn btn-dark btn-lg btn-block'
+                        className='btn btn-dark btn-lg btn-block mt-5'
                     >
-                        Entrar
+                        Registro
                     </button>
-                    <div className='row'>
-                        <div className='col-6'>
-                            <p className='forgot-password text-left'>
-                                Nuevo{' '}
-                                <Link to='/singin'>
-                                    <a href='#'>registro</a>
-                                </Link>
-                            </p>
-                        </div>
-                        <div className='col-6'>
-                            <p className='forgot-password text-right'>
-                                Olvidaste <a href='#'>contraseña?</a>
-                            </p>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>
