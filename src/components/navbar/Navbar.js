@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../../auth/AuthContext';
 import { types } from '../../types/types';
 
@@ -17,7 +17,7 @@ export const MainNavbar = ({ history }) => {
             <nav className='navbar navbar-expand-lg navbar-light bg-light'>
                 <Link to='/'>
                     <a className='navbar-brand' href='/'>
-                        Navbar
+                        Control
                     </a>
                 </Link>
                 <button
@@ -36,13 +36,14 @@ export const MainNavbar = ({ history }) => {
                     id='navbarTogglerDemo02'
                 >
                     <ul className='navbar-nav m-auto mt-2 mt-lg-0'>
-                        <li className='nav-item active'>
-                            <Link to='/new'>
-                                <a className='nav-link' href='#'>
-                                    Nuevo{' '}
-                                    <span className='sr-only'>(current)</span>
-                                </a>
-                            </Link>
+                        <li className='nav-item'>
+                            <NavLink
+                                to='/new'
+                                className='nav-link'
+                                activeClassName='active'
+                            >
+                                Nuevo
+                            </NavLink>
                         </li>
                         <li className='nav-item'>
                             <a className='nav-link' href='#'>

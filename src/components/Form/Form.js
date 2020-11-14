@@ -1,32 +1,37 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import { useForm } from '../../hooks/useForm/useForm';
 
 const initialForm = {
     name: '',
     nationality: '',
     birth: '',
-    sexH: false,
-    sexM: false,
+    sex: 'hombre',
     resumen: '',
 };
 
-export const Form = ({ history }) => {
+export const Form = () => {
+    const history = useHistory();
     const [formValues, handleInputChange, reset] = useForm(initialForm);
-    const { name, nationality, birth, sexH, sexM, resumen } = formValues;
+    const { name, nationality, birth, sex, resumen } = formValues;
     const handleSubmit = (event) => {
         event.preventDefault();
         let myHeaders = new Headers();
         myHeaders.append('Accept', 'application/json');
         myHeaders.append('Content-Type', 'application/json');
+        myHeaders.append(
+            'Authorization',
+            `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE2MDUzNzMwODUsImV4cCI6MTYwNTQ1OTQ4NSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwic3ViIjoiNWZhZWM4ZDA3ZDk2ZGMzYTdjYmRkMWU2IiwianRpIjoiMDhlNjA1MTYtNGRkNS00OTdmLWIyYmItYmRjYmM3MWZkMGUxIn0.EoyCBl3i5T7Zo8IJTJe5XWdA4j8F0LUO3VEzgvuz6oc'}`
+        );
 
         var raw = {
             name,
             nationality,
             birth,
-            sexH,
-            sexM,
+            sex,
             resumen,
         };
+        console.log(raw);
         raw = JSON.stringify(raw);
         var requestOptions = {
             method: 'POST',
@@ -38,8 +43,8 @@ export const Form = ({ history }) => {
         fetch('http://localhost:3030/pacientes', requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                console.log(result);
                 if (!!result.name) {
+                    console.log('nameeeeee', result.name);
                     history.push('/');
                 } else {
                     reset();
@@ -95,9 +100,9 @@ export const Form = ({ history }) => {
                         <input
                             className='form-check-input'
                             type='radio'
-                            name='sexH'
+                            name='sex'
                             id='inlineRadio1'
-                            defaultValue='option1'
+                            defaultValue='hombre'
                             onChange={handleInputChange}
                         />
                         <label
@@ -111,9 +116,9 @@ export const Form = ({ history }) => {
                         <input
                             className='form-check-input'
                             type='radio'
-                            name='sexM'
+                            name='sex'
                             id='inlineRadio2'
-                            defaultValue='option2'
+                            defaultValue='mujer'
                             onChange={handleInputChange}
                         />
                         <label
@@ -130,6 +135,7 @@ export const Form = ({ history }) => {
                     className='form-control'
                     id='exampleFormControlTextarea1'
                     rows='3'
+                    name='resumen'
                     onChange={handleInputChange}
                 ></textarea>
 

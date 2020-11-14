@@ -10,6 +10,7 @@ export const AppRouter = ({ history }) => {
             <MainNavbar history={history} />
             <Switch>
                 <Route path='/new' component={NewPatient} />
+                <Route path='/paciente/:id' component={NewPatient} />
                 <Route path='/' component={HomePage} />
             </Switch>
         </>
