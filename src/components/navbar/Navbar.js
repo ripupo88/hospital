@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../auth/AuthContext';
+import { types } from '../../types/types';
 
-export const MainNavbar = () => {
+export const MainNavbar = ({ history }) => {
+    const { dispatch } = useContext(AuthContext);
     const userStorage = JSON.parse(localStorage.getItem('user'));
     const name = userStorage.user.name;
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        dispatch({ type: types.logout });
+        history.push('/login');
+    };
     return (
         <div>
             <nav className='navbar navbar-expand-lg navbar-light bg-light'>
@@ -29,9 +37,12 @@ export const MainNavbar = () => {
                 >
                     <ul className='navbar-nav m-auto mt-2 mt-lg-0'>
                         <li className='nav-item active'>
-                            <a className='nav-link' href='#'>
-                                Home <span className='sr-only'>(current)</span>
-                            </a>
+                            <Link to='/new'>
+                                <a className='nav-link' href='#'>
+                                    Nuevo{' '}
+                                    <span className='sr-only'>(current)</span>
+                                </a>
+                            </Link>
                         </li>
                         <li className='nav-item'>
                             <a className='nav-link' href='#'>
@@ -92,9 +103,12 @@ export const MainNavbar = () => {
                                     Another action
                                 </a>
                                 <div class='dropdown-divider'></div>
-                                <a class='dropdown-item' href='#'>
+                                <div
+                                    onClick={handleLogout}
+                                    class='btn dropdown-item'
+                                >
                                     Cerrar sesion
-                                </a>
+                                </div>
                             </div>
                         </li>
                     </ul>

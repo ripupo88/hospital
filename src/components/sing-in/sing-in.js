@@ -1,6 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { AuthContext } from '../../auth/AuthContext';
-import { types } from '../../types/types';
 import './sing-in.css';
 
 import { useForm } from '../../hooks/useForm/useForm';
@@ -16,7 +14,6 @@ const initialForm = {
 export const SingIn = ({ history }) => {
     const [formValues, handleInputChange, reset] = useForm(initialForm);
     const { nombre, email, password, password2, rol } = formValues;
-    const { dispatch } = useContext(AuthContext);
     const [loginerror, setLoginerror] = useState(false);
     console.log('error state', loginerror);
     const handleLogin = () => {

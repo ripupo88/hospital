@@ -36,7 +36,7 @@ export const Login = ({ history }) => {
             .then((result) => {
                 console.log(result);
                 if (!!result.accessToken) {
-                    localStorage.setItem('user', JSON.stringify('result'));
+                    localStorage.setItem('user', JSON.stringify(result));
                     dispatch({ type: types.login, payload: result });
                     history.push('/');
                 } else {
