@@ -12,6 +12,10 @@ export const MainNavbar = ({ history }) => {
         dispatch({ type: types.logout });
         history.push('/login');
     };
+    const handleSearch = (event) => {
+        event.preventDefault();
+        history.push('/?name=Sury');
+    };
     return (
         <div>
             <nav className='navbar navbar-expand-lg navbar-light bg-light'>
@@ -56,7 +60,10 @@ export const MainNavbar = ({ history }) => {
                             </a>
                         </li>
                         <li>
-                            <form className='form-inline my-2 my-lg-0'>
+                            <form
+                                onSubmit={handleSearch}
+                                className='form-inline my-2 my-lg-0'
+                            >
                                 <input
                                     className='form-control mr-sm-2'
                                     type='search'

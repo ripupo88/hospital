@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
+import { myfetch } from '../../fetch';
 import { useForm } from '../../hooks/useForm/useForm';
 
 const initialForm = {
@@ -14,43 +15,26 @@ export const Form = () => {
     const history = useHistory();
     const [formValues, handleInputChange, reset] = useForm(initialForm);
     const { name, nationality, birth, sex, resumen } = formValues;
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        let myHeaders = new Headers();
-        myHeaders.append('Accept', 'application/json');
-        myHeaders.append('Content-Type', 'application/json');
-        myHeaders.append(
-            'Authorization',
-            `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE2MDUzNzMwODUsImV4cCI6MTYwNTQ1OTQ4NSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwic3ViIjoiNWZhZWM4ZDA3ZDk2ZGMzYTdjYmRkMWU2IiwianRpIjoiMDhlNjA1MTYtNGRkNS00OTdmLWIyYmItYmRjYmM3MWZkMGUxIn0.EoyCBl3i5T7Zo8IJTJe5XWdA4j8F0LUO3VEzgvuz6oc'}`
-        );
-
-        var raw = {
+        var data = {
             name,
             nationality,
             birth,
             sex,
             resumen,
         };
-        console.log(raw);
-        raw = JSON.stringify(raw);
-        var requestOptions = {
+        let myresult = await myfetch({
+            api: 'pacientes',
             method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow',
-        };
-
-        fetch('http://localhost:3030/pacientes', requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                if (!!result.name) {
-                    console.log('nameeeeee', result.name);
-                    history.push('/');
-                } else {
-                    reset();
-                }
-            })
-            .catch((error) => console.log('error', error));
+            data,
+        });
+        if (!!myresult.name) {
+            console.log('nameeeeee', myresult.name);
+            history.push('/');
+        } else {
+            reset();
+        }
     };
     return (
         <div>

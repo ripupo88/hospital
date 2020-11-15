@@ -1,0 +1,11 @@
+.cont {
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dat {
+    width: 400px;
+    margin-left: 2em;
+}
