@@ -1,17 +1,23 @@
 import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../../auth/AuthContext';
+import { myLogout } from '../../helpers/mylogout';
 import { types } from '../../types/types';
 
 export const MainNavbar = ({ history }) => {
     const { dispatch } = useContext(AuthContext);
     const userStorage = JSON.parse(localStorage.getItem('user'));
-    const name = userStorage.user.name;
+    let name;
     const handleLogout = () => {
+        myLogout(dispatch, history);
+    };
+    if (userStorage === null) {
         localStorage.removeItem('user');
         dispatch({ type: types.logout });
         history.push('/login');
-    };
+    } else {
+        name = userStorage.user.name;
+    }
     const handleSearch = (event) => {
         event.preventDefault();
         history.push('/?name=Sury');

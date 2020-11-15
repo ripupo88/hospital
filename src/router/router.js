@@ -14,7 +14,7 @@ export const MainRouter = () => {
     const {
         user: { logged },
     } = useContext(AuthContext);
-    console.log(logged);
+
     return (
         <Router>
             <Switch>

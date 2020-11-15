@@ -7,14 +7,16 @@ export const PacientePage = () => {
     const { id } = useParams();
     const [myresult, setMyresult] = useState('');
 
-    useEffect(async () => {
-        setMyresult(
-            await myfetch({
+    useEffect(() => {
+        const myefect = async () => {
+            const res = await myfetch({
                 api: `pacientes/${id}`,
                 method: 'GET',
-            })
-        );
-    }, []);
+            });
+            if (!!res) setMyresult(res);
+        };
+        myefect();
+    });
     return (
         <>
             <div className='cont'>
